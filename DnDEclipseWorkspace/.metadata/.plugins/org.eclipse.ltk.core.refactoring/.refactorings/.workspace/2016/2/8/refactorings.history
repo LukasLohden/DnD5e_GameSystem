@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;DnD5e_GameSystem/ClientLoop&apos;" deleteContents="false" description="Delete resource &apos;DnD5e_GameSystem/ClientLoop&apos;" element1="/DnD5e_GameSystem/ClientLoop" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1455825205637"/>
+</session>

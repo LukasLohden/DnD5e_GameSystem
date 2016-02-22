@@ -1,13 +1,67 @@
 -- VERSION_4
 -- START DISKCACHE
 /Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/.metadata/.plugins/org.eclipse.core.resources/.projects/DnD5e_GameSystem/com.python.pydev.analysis/v2_indexcache
+ClientGUI|1455827361000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ClientGUI.py
+ClientSocket|1455827373000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ClientSocket.py
+Reference|1455830931000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/Reference.py
+Gamestate|1455827375000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/Gamestate.py
+ServerFiles|1455827378000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ServerFiles.py
+ServerSocket|1455827368000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ServerSocket.py
+ClientLoop|1455827364000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ClientLoop.py
+ServerLoop|1455827371000|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ServerLoop.py
 -- END DISKCACHE
 -- START DICTIONARY
-0
+1
+1=Reference
 -- END DICTIONARY
 -- START TREE 1
-0
+37
+_ch|0|
+ab1|1|ab1!11@
+abi|1|Abilities_create_random!10@
+ac1|1|ac1!11@
+act|4|Active!11@Active_display!10@Active_create!10@Active_create_random!10@
+ap1|1|ap1!11@
+app|4|Appearance_display!10@Appearance_create_random!10@Appearance!11@Appearance_create!10@
+at1|1|at1!11@
+att|4|Attributes_create_random!10@Attributes!11@Attributes_create!10@Attributes_display!10@
+ch1|1|ch1!11@
+cha|8|Character_create!10@Character_create_random!10@Character_create_elite!10@Character!11@Character_create_boss!10@Character_create_mob!10@Character_display!10@Character_create_NPC!10@
+co1|1|co1!11@
+col|4|Collection_remove_by_name!10@Collection_search_by_name!10@Collection_create!10@Collection_add!10@
+com|4|Combat_display!10@Combat_create!10@Combat!11@Combat_create_random!10@
+dat|0|
+det|0|
+dic|2|Dice_roll!10@Dice_roll_display!10@
+gam|1|game_system!10@
+han|1|handle_commands!10@
+in1|1|in1!11@
+inf|0|
+inv|2|invalid_command!10@Inventory_create_random!10@
+ite|0|
+men|1|MENU!11@
+nam|1|Name_create_random!10@
+pa1|1|pa1!11@
+pas|4|Passive_display!10@Passive_create_random!10@Passive!11@Passive_create!10@
+per|0|
+rem|1|remove_non_letters!10@
+sav|0|
+sk1|1|sk1!11@
+ski|3|Skills_create_random!10@Skills!11@Skills_create!10@
+spe|0|
+st1|1|st1!11@
+sta|3|Statistics_create_random!10@Statistics_create!10@Statistics!11@
+va1|1|va1!11@
+val|4|Values_create!10@Values_create_random!10@Values!11@Values_display!10@
 -- END TREE
 -- START TREE 2
-0
+8
+__i|0|
+abi|0|
+app|0|
+det|0|
+per|0|
+sav|0|
+ski|0|
+spe|0|
 -- END TREE

@@ -1,1 +1,10 @@
 MODULES_MANAGER_V2
+Character|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/Character.py
+ClientGUI|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ClientGUI.py
+ClientLoop|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ClientLoop.py
+ClientSocket|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ClientSocket.py
+Gamestate|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/Gamestate.py
+Reference|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/Reference.py
+ServerFiles|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ServerFiles.py
+ServerLoop|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ServerLoop.py
+ServerSocket|/Users/Lukas/Documents/DnD5e_GameSystem/DnDEclipseWorkspace/DnD5e_GameSystem/ServerSocket.py
