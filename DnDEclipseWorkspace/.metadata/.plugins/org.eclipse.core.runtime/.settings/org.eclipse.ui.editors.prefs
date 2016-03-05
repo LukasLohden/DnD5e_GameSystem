@@ -23,4 +23,5 @@ overviewRuler_migration=migrated_3.1
 printMarginColor=102,102,102
 pydevOccurrenceIndicationColor=128,0,0
 secondaryIPColor=34,34,32
+spellingEnabled=false
 writeOccurrenceIndicationColor=97,97,97

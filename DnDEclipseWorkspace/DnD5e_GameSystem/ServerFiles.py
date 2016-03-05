@@ -12,4 +12,26 @@ This module defines helper functions to be used in the ServerLoop to store and a
 This will include the opening, parsing, and manipulation of character and game state collections.
 """
 ###################################################################################################
+# IMPORTS
+###################################################################################################
 
+from CharacterData import Character
+
+import json
+
+###################################################################################################
+
+def txt_to_json(file: str) -> 'json':
+    """
+    Opens the specified file and return it as a json
+    """
+    readFile = open(file)
+    contents = readFile.readlines()
+    return json.loads(contents)
+
+def process_json(toProcess: json) -> [Character]:
+    """
+    Takes in a json object and return a list of 
+    """
+    collection  = []
+    return collection

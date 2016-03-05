@@ -1,0 +1,390 @@
+###################################################################################################
+# PROGRAM:     Dungeons and Dragons Fifth Edition Game System                                     #
+# MODULE:      CponsoleHandler.py                                                                       #
+# AUTHOR:      Luke Lohden                                                                        #
+# CREATED:     2016 • 02 • 15                                                                     #
+###################################################################################################
+
+###################################################################################################
+"""
+DESCRIPTION:
+This module allows use of the program without the GUI interface by inputting commands into the
+console. This console allows for debugging and development before the GUI is implemented.
+"""
+###################################################################################################
+
+###################################################################################################
+# IMPORTS
+###################################################################################################
+
+from CharacterData import Character
+import ServerFiles
+
+from random import choice
+
+###################################################################################################
+# HANDLER GUI:
+
+
+MAIN_INTRO = """
+-------------------------------------------------
+Hello! Welcome to the Dungeons and Dragons 
+Fifth Edition Character Creation Program. 
+This program will allow you to easily create 
+new fifth edition characters, save character 
+information, and edit saved characters. If 
+you're new to D&D or are looking for a 
+streamlined creation process, this program is 
+for you.
+--------------------------------------------------
+Press any key to continue.
+--------------------------------------------------
+"""
+
+MAIN_MENU = """
+
+--------------------------------------------------
+D&D 5E - Character Creation: Select an option:
+    N: Create a new character
+    L: Load an existing character
+    D: Delete the active character
+    E: Edit the active character
+    P: Print the active character information
+    
+    Q: Quit
+--------------------------------------------------
+Input Command (Case Insensitive): 
+"""
+
+GET_ACTIVE = """
+--------------------------------------------------
+Enter name of character to load:
+--------------------------------------------------
+Input (Case Insensitive): 
+"""
+
+###################################################################################################
+# HANDLER
+###################################################################################################
+
+def handler():
+    """
+    Handles user input and executes user commands to create, load,
+    edit, delete, and print character information.
+    """
+    collection = load_collection()                          # Load existing characters
+    active = 0;                                             # Initialized with no active player
+    
+    print(MAIN_INTRO)
+    while True:
+        command = input(MAIN_MENU)                          # Receive user command
+        
+        if command == 'Q':                                  # Quit
+            return
+        elif command == 'N':                                # Create new character
+            create_new()
+        elif command == 'L':                                # Load existing character
+            charID = input(GET_ACTIVE)
+            load_existing(charID)
+        elif command == 'D':                                # Delete active character
+            delete_active(active)
+        elif command == 'E':                                # Edit active character
+            edit_active(active)
+        elif command == 'P':                                # Print character information
+            print_active(active)
+        
+###################################################################################################
+# HANDLER HELPER FUNCTIONS
+###################################################################################################
+
+def load_collection():
+    pass
+
+def create_new():
+    pass
+
+def load_existing(charID: str):
+    pass
+
+def delete_active(active: Character):
+    pass
+
+def edit_active(active: Character):
+    pass
+
+def print_active(active: Character):
+    pass
+
+###################################################################################################
+# CREATE_NEW HELPER FUNCTIONS
+###################################################################################################
+
+# CREATE_NEW GUI
+
+CREATE_INTRO = """
+--------------------------------------------------
+This process will guide you through creating 
+a character. It's recommended that you follow 
+the steps in order to set the starting
+values, but you may return to any section 
+again to make changes.
+--------------------------------------------------
+Enter any character to continue. 
+Enter "0" to return to main menu.
+--------------------------------------------------
+Input (Case Sensitive): 
+"""
+
+CREATE_MENU = """
+--------------------------------------------------
+Creating character: 
+--------------------------------------------------
+Name: {name}
+    A: Roll for abilities
+    N: Rename Character
+    R: Select Race
+    C: Select Class
+    P: Select Proficiencies
+    L: Define Looks/Appearance
+    M: Define Morality/Alignment
+    B: Select Background
+    E: Select Equipment
+    
+    S: Save Character
+    Q: Quit without saving
+--------------------------------------------------
+Input Command (Case Insensitive):    
+"""
+
+RACE_MENU = """
+--------------------------------------------------
+Selecting Race
+--------------------------------------------------
+Selected Race: {race}
+
+Select One:
+    DW: Dwarf
+    EL: Elf
+    HA: Halfling
+    HU: Human
+    DR: Dragonborn
+    GN: Gnome
+    HE: Half-Elf
+    HO: Half-Orc
+    TI: Tiefling
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Input Selection (Case Insensitive): 
+"""
+
+SUBRACE_MENU = """
+TO BE DEFINED LATER
+"""
+
+CLASS_MENU = """
+--------------------------------------------------
+Selecting Class
+--------------------------------------------------
+Selected Class: {class}
+
+Select One:
+    BB: Barbarian
+    BA: Bard
+    CL: Cleric
+    DR: Druid
+    FI: Fighter
+    MO: Monk
+    PA: Paladin
+    RA: Ranger
+    RO: Rogue
+    SO: Sorcerer
+    WA: Warlock
+    WI: Wizard
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Input Selection (Case Insensitive): 
+"""
+
+PROFICIENCY_MENU = """
+--------------------------------------------------
+Selecting Proficiencies
+--------------------------------------------------
+Selected Proficiencies:
+Saving Throws: {savingThrows}
+Skills:        {skills}
+    ST: Select saving throw proficiencies
+    SK: Select skill proficiencies
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Input Selection (Case Insensitive): 
+"""
+
+SAVINGTHROW_MENU = """
+--------------------------------------------------
+Selectign Saving Throw Proficicency
+--------------------------------------------------
+Selected Saving Throws: {savingThrows}
+
+Select Two:
+    STR: Strength
+    DEX: Dexterity
+    CON: Constitution
+    INT: Intellect
+    WIS: Wisdom
+    CHA: Charisma
+    
+    R: Return to Proficiency Menu
+--------------------------------------------------
+Example input: "DEX CON"
+Input Selection (Case Insensitive): 
+"""
+
+SKILLS_MENU = """
+--------------------------------------------------
+Selecting Skill Proficiency
+--------------------------------------------------
+Selected Skills: {skills}
+
+Select Two:
+    ACR: Acrobatics
+    ANI: Animal Handling
+    ARC: Arcana
+    ATH: Atheltics
+    DEC: Deception
+    HIS: History
+    INS: Insight
+    INT: Intimidation
+    INV: Investigate
+    MED: Medicine
+    NAT: Nature
+    PRC: Perception
+    PRF: Performance
+    PRS: Persuasion
+    REL: Religion
+    SOH: Sleight of Hand
+    STE: Stealth
+    SUR: Survival
+    
+    
+    R: Return to Proficiency Menu
+--------------------------------------------------
+Example input: "STE SOH" ; "REL MED" ; "ARC HIS"
+Input Selection (Case Insensitive): 
+"""
+
+APPEARANCE_MENU = """
+--------------------------------------------------
+Selecting Appearance: 
+--------------------------------------------------
+Current Appearance:
+Age:    {age}
+Gender: {gender}
+Height: {height}
+Weight: {weight}
+Skin:   {skin}
+Eyes:   {eyes}
+Hair:   {hair}
+
+Specify field with input:
+    GE: Gender
+    HE: Height
+    WE: Weight
+    AG: Age
+    SK: Skin Color/Complexion
+    EY: Eye Color
+    HA: Hair Color
+    
+    R: Return to Main Menu
+--------------------------------------------------
+Example inputs: "WE 157lbs" ; "WE 79kg" ; "AG 27"
+Input Selection (Case Insensitive): 
+"""
+
+MORALITY_MENU = """
+--------------------------------------------------
+Selecting Alignment:
+--------------------------------------------------
+Current Alignment: {alignment}
+
+Lawfulness (Pick One):
+    C: Chaotic
+    N: Neutral
+    L: Lawful
+    
+Goodness (Pick One):
+    E: Evil
+    N: Neutral
+    G: Good
+    
+    R: Return to Main Menu
+--------------------------------------------------
+Example inputs: "C N" ; "N G" ; "L G"
+Input Selection (Case Insensitive): 
+"""
+
+BACKGROUND_MENU = """
+--------------------------------------------------
+Selecting Background:
+--------------------------------------------------
+Current Background: {background}
+
+Select One:
+    AC: Acolyte
+    CH: Charlatan
+    EN: Entertainter
+    GA: Guild Artisan
+    HE: Hermit
+    NO: Noble
+    OU: Outlander
+    SA: Sage
+    SA: Sailor
+    SO: Soldier
+    UR: Urchin
+    
+    R: Return to Main Menu
+--------------------------------------------------
+Example inputs: "AC" ; "CH" ; "SA"
+Input Selection (Case Insensitive): 
+"""
+
+BACKGROUND_DETAILS_MENU = """
+--------------------------------------------------
+Selecting Background:
+--------------------------------------------------
+Selected Background: {background}
+
+Background Details:
+    {details}
+Personality Trait:
+    {personality}
+Ideal:
+    {ideal}
+Bond:
+    {bond}
+Flaw:
+    {flaw}
+    
+Skill Proficiencies:  {skills}
+Languages:            {languages}
+Equipment:            {equipment}
+      
+    R: Return to Background Menu
+--------------------------------------------------
+Example inputs: "AC" ; "CH" ; "SA"
+Input Selection (Case Insensitive): 
+"""
+
+
+
+
+
+
+
+
+
+
+
+

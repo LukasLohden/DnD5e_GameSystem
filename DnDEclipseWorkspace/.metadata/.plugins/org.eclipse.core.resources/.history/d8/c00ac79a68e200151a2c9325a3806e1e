@@ -1,0 +1,180 @@
+###################################################################################################
+# PROGRAM:     Dungeons and Dragons Fifth Edition Game System                                     #
+# MODULE:      CponsoleHandler.py                                                                       #
+# AUTHOR:      Luke Lohden                                                                        #
+# CREATED:     2016 • 02 • 15                                                                     #
+###################################################################################################
+
+###################################################################################################
+"""
+DESCRIPTION:
+This module allows use of the program without the GUI interface by inputting commands into the
+console. This console allows for debugging and development before the GUI is implemented.
+"""
+###################################################################################################
+
+###################################################################################################
+# IMPORTS
+###################################################################################################
+
+from CharacterData import Character
+import ServerFiles
+
+from random import choice
+
+###################################################################################################
+# HANDLER GUI:
+MAIN_INTRO = """
+------------------------------------------------------------------
+Hello! Welcome to the Dungeons and Dragons Fifth Edition
+Character Creation Program. This program will allow you to easily
+create new fifth edition characters, save character information,
+and edit saved characters. If you're new to D&D or are looking for 
+a streamlined creation process, this program is for you.
+------------------------------------------------------------------
+Press any key to continue.
+------------------------------------------------------------------
+"""
+
+MAIN_MENU = """
+
+----------------------------------------------
+D&D 5E - Character Creation: Select an option:
+    N: Create a new character
+    L: Load an existing character
+    D: Delete the active character
+    E: Edit the active character
+    P: Print the active character information
+    
+    Q: Quit
+----------------------------------------------
+Input Command (Case Insensitive): 
+"""
+
+GET_ACTIVE = """
+----------------------------------------------
+Enter name of character to load:
+Input (Case Insensitive): 
+"""
+
+###################################################################################################
+# HANDLER
+###################################################################################################
+
+def handler():
+    """
+    Handles user input and executes user commands to create, load,
+    edit, delete, and print character information.
+    """
+    collection = load_collection()                          # Load existing characters
+    active = 0;                                             # Initialized with no active player
+    
+    print(MAIN_INTRO)
+    while True:
+        command = input(MAIN_MENU)                          # Receive user command
+        
+        if command == 'Q':                                  # Quit
+            return
+        elif command == 'N':                                # Create new character
+            create_new()
+        elif command == 'L':                                # Load existing character
+            charID = input(GET_ACTIVE)
+            load_existing(charID)
+        elif command == 'D':                                # Delete active character
+            delete_active(active)
+        elif command == 'E':                                # Edit active character
+            edit_active(active)
+        elif command == 'P':                                # Print character information
+            print_active(active)
+        
+###################################################################################################
+# HANDLER HELPER FUNCTIONS
+###################################################################################################
+
+def load_collection():
+    pass
+
+def create_new():
+    pass
+
+def load_existing(charID: str):
+    pass
+
+def delete_active(active: Character):
+    pass
+
+def edit_active(active: Character):
+    pass
+
+def print_active(active: Character):
+    pass
+
+###################################################################################################
+# CREATE_NEW HELPER FUNCTIONS
+###################################################################################################
+
+# CREATE_NEW GUI
+
+CREATE_INTRO = """
+------------------------------------------------------------------
+This process will guide you through creating a character. It's
+recommended that you follow the steps in order to set the starting
+values, but you may return to any section again to make changes.
+------------------------------------------------------------------
+Enter any character to continue. Enter "0" to return to main menu.
+Input (Case Sensitive): 
+
+"""
+
+CREATE_MENU = """
+----------------------------------------------
+Creating character: {}
+    A: Roll for abilities
+    N: Rename Character
+    R: Select Race
+    C: Select Class
+    P: Select Proficiencies
+    L: Define Looks/Appearance
+    M: Define Morality/Alignment
+    B: Select Background
+    E: Select Equipment
+    
+    S: Save Character
+    Q: Quit without saving
+----------------------------------------------
+Input Command (Case Insensitive):
+    
+"""
+
+RACE_MENU = """
+----------------------------------------------
+Selected Race: {}
+    Dw: Dwarf
+    El: Elf
+    Ha: Halfling
+    Hu: Human
+    Dr: Dragonborn
+    Gn: Gnome
+    HE: Half-Elf
+    HO: Half-Orc
+    Ti: Tiefling
+    
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,129 @@
+###################################################################################################
+# PROGRAM:     Dungeons and Dragons Fifth Edition Game System                                     #
+# MODULE:      CponsoleHandler.py                                                                       #
+# AUTHOR:      Luke Lohden                                                                        #
+# CREATED:     2016 • 02 • 15                                                                     #
+###################################################################################################
+
+###################################################################################################
+"""
+DESCRIPTION:
+This module allows use of the program without the GUI interface by inputting commands into the
+console. This console allows for debugging and development before the GUI is implemented.
+"""
+###################################################################################################
+
+###################################################################################################
+# IMPORTS
+###################################################################################################
+
+import Character
+import ServerFiles
+
+from collections import namedtuple
+from random import choice
+
+###################################################################################################
+# CONSOLE GUI:
+INTRO = """
+------------------------------------------------------------------
+Hello! Welcome to the Dungeons and Dragons Fifth Edition
+Character Creation Program. This program will allow you to easily
+create new fifth edition characters, save character information,
+and edit saved characters. If you're new to D&D or are looking for 
+a streamlined creation process, this program is for you.
+------------------------------------------------------------------
+Press any key to continue.
+------------------------------------------------------------------
+"""
+
+MENU = """
+----------------------------------------------
+D&D 5E - Character Creation: Select an option:
+    1. Create a new character
+    2. Load an existing character
+    3. Delete the active character
+    4. Edit the active character
+    5. Print the active character information
+    
+    0. Quit
+
+----------------------------------------------
+Input Command (0-5): 
+"""
+
+GET_ACTIVE = """
+----------------------------------------------
+Input the name of the character to load: 
+"""
+
+###################################################################################################
+# HANDLER
+###################################################################################################
+
+def handler():
+    """
+    Handles user input and executes user commands to create, load,
+    edit, delete, and print character information.
+    """
+    collection = load_collection()                          # Load existing characters
+    active = 0;                                             # Initialized with no active player
+    
+    while True:
+        command = input(MENU)                               # Receive user command
+        
+        if command == '0':                                  # Quit
+            return
+        elif command == '1':                                # Create new character
+            create_new()
+        elif command == '2':                                # Load existing character
+            charID = input(GET_ACTIVE)
+            load_existing(charID)
+        elif command == '3':                                # Delete active character
+            delete_active(active)
+        elif command == '4':                                # Edit active character
+            edit_active(active)
+        elif command == '5':                                # Print character information
+            print_active(active)
+        
+###################################################################################################
+# HANDLER HELPER FUNCTIONS
+###################################################################################################
+
+def load_collection():
+    pass
+
+def create_new():
+    pass
+
+def load_existing(charID: str):
+    pass
+
+def delete_active(active: namedtuple):
+    pass
+
+def edit_active(active: namedtuple):
+    pass
+
+def print_active(active: namedtuple):
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
