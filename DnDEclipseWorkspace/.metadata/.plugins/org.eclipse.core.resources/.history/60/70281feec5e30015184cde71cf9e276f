@@ -1,0 +1,1163 @@
+###################################################################################################
+# PROGRAM:     Dungeons and Dragons Fifth Edition Game System                                     #
+# MODULE:      CponsoleHandler.py                                                                       #
+# AUTHOR:      Luke Lohden                                                                        #
+# CREATED:     2016 • 02 • 15                                                                     #
+###################################################################################################
+
+###################################################################################################
+"""
+DESCRIPTION:
+This module allows use of the program without the GUI interface by inputting commands into the
+console. This console allows for debugging and development before the GUI is implemented.
+"""
+###################################################################################################
+
+###################################################################################################
+# IMPORTS
+###################################################################################################
+
+from CharacterData import Character
+import ServerFiles
+
+from random import choice
+
+###################################################################################################
+# HANDLER GUI:
+
+
+MAIN_INTRO = """
+-------------------------------------------------
+Hello! Welcome to the Dungeons and Dragons 
+Fifth Edition Character Creation Program. 
+This program will allow you to easily create 
+new fifth edition characters, save character 
+information, and edit saved characters. If 
+you're new to D&D or are looking for a 
+streamlined creation process, this program is 
+for you.
+--------------------------------------------------
+Input any key to continue: 
+"""
+
+MAIN_MENU = """
+
+--------------------------------------------------
+D&D 5E - Character Creation: Select an option:
+    N: Create a new character
+    L: Load an existing character
+    D: Delete the active character
+    E: Edit the active character
+    P: Print the active character information
+    
+    Q: Quit
+--------------------------------------------------
+Input Command (Case Insensitive): 
+"""
+
+GET_ACTIVE = """
+--------------------------------------------------
+Enter name of character to load:
+--------------------------------------------------
+Input (Case Insensitive): 
+"""
+
+###################################################################################################
+# HANDLER
+###################################################################################################
+
+def handler():
+    """
+    Handles user input and executes user commands to create, load,
+    edit, delete, and print character information.
+    """
+    collection = load_collection()
+    active = 0;
+    command = input(MAIN_INTRO)
+    while True:
+        command = input(MAIN_MENU).upper() 
+        
+        if command == 'Q':                 # Quit
+            return
+        elif command == 'N':               # Create new character
+            create_new()
+        elif command == 'L':               # Load existing character
+            charID = input(GET_ACTIVE)
+            load_existing(charID)
+        elif command == 'D':               # Delete active character
+            delete_active(active)
+        elif command == 'E':               # Edit active character
+            edit_active(active)
+        elif command == 'P':               # Print character information
+            print_active(active)
+        else:
+            print("Invalid command entered. Try Again.\n")
+        
+#HANDLER HELPER FUNCTIONS##########################################################################
+
+def load_collection():
+    pass
+
+CREATE_INTRO = """
+--------------------------------------------------
+This process will guide you through creating 
+a character. It's recommended that you follow 
+the steps in order to set the starting
+values, but you may return to any section 
+again to make changes.
+--------------------------------------------------
+Enter any character to continue. 
+Enter "0" to return to main menu.
+--------------------------------------------------
+Input (Case Insensitive): 
+"""
+
+CREATE_MENU = """
+--------------------------------------------------
+Creating character: 
+--------------------------------------------------
+Name: {name}
+    A: Roll for abilities
+    N: Rename Character
+    R: Select Race
+    C: Select Class
+    P: Select Proficiencies
+    L: Define Looks/Appearance
+    M: Define Morality/Alignment
+    B: Select Background
+    E: Select Equipment
+    
+    S: Save character and quit
+    Q: Quit without saving
+--------------------------------------------------
+Input Command (Case Insensitive):    
+"""
+
+def create_new() -> Character:
+    """
+    Creates a new character by allowing the user to
+    select character information
+    """
+    while True:
+        command = input(CREATE_INTRO).upper()
+        if command == "0":
+            return
+        else:
+            character = Character()
+            break
+    name = "NO NAME"  
+    while True:
+        command = input(CREATE_MENU.format(name=name)).upper()
+        if command == "A":      #Abilities
+            character.abilities = select_abilities()
+            print("Your ability scores are: " +  str(character.abilities))
+        elif command == "N":    #Name
+            name = select_name()
+            character.name = name
+        elif command == "R":    #Race
+            character.race = select_race()
+        elif command == "C":    #Class
+            character.clas = select_class()
+        elif command == "P":    #Proficiencies
+            character.proficiency = select_proficiency()
+        elif command == "L":    #Looks
+            character.looks = select_looks()
+        elif command == "M":    #Morality
+            character.morality = select_morality()
+        elif command == "B":    #Background
+            character.background = select_background()
+        elif command == "E":    #Equipment
+            character.equipment = select_equipment()
+            
+        elif command == "S":    #Save
+            return character
+        elif command == "Q":    #Quit
+            return
+        else:
+            print("Invalid command entered. Try Again.\n")
+
+def load_existing(charID: str):
+    pass
+
+def delete_active(active: Character):
+    pass
+
+def edit_active(active: Character):
+    pass
+
+def print_active(active: Character):
+    pass
+
+###################################################################################################
+# CREATE_NEW HELPER FUNCTIONS
+###################################################################################################
+
+
+ABILITY_INTRO = """
+--------------------------------------------------
+Rolling for ability scores involves rolling 4 d6's
+for each of the six abilities. Each ability score
+is determined by the sum of the 3 highest rolls of
+the 4 dice rolled. Once you have rolled for all 6
+scores, you can assign them as you like to each
+ability so that you may prioritize the abilities
+that are important to you. 
+
+This program will automatically simulate the 
+rolling for you. If you'd like, you may roll for
+yourself and input the 6 numbers yourself
+seperated by spaces. Ex: 16 14 11 13 8 12
+--------------------------------------------------
+Input any key to continue. Input "0" to return.
+Enter Command (Case Insensitive): 
+"""
+
+ABILITY_ROLL = """
+---------------------------------------------------------------------
+Rolling for Abilities
+---------------------------------------------------------------------
+Select from one of these options:
+    ROLL: Roll 4 d6's 6 times
+    STANDARD: Take the standard set of skills (15,14,13,12,10,8)
+    # # # # # #: Input your own rolls to be used as ability scores
+    
+    R: Return to Character Creation Menu
+---------------------------------------------------------------------
+Example input: "ROLL" ; "STANDARD" ; "16 14 11 13 8 12"
+Enter Command (Case Insensitive): 
+"""
+
+ABILITY_PRIORITY = """\
+---------------------------------------------------------------------
+Rolling for Abilities
+---------------------------------------------------------------------
+Your ability rolls are: {scores}
+
+Prioritize your stats by inputting them in the order to prioritize
+with the highest priority first. 
+
+For example, to emphasize strength and constitution over intellect 
+and wisdom with the standard set,(15, 14, 13, 12, 10, 8) you would 
+input: "STR CON DEX CHA WIS INT". 
+
+This would result in ability scores of STR: 15, CON:14, DEX:13, 
+CHA: 12, WIS: 10, and INT: 8.
+
+Enter "R" to return to the Character Creation Menu
+---------------------------------------------------------------------
+Enter Command (Case Insensitive): 
+"""
+
+class Abilities:
+    def __init__(self, STR:int, DEX:int, CON:int, INT:int, WIS:int, CHA:int):
+        self.STR = STR
+        self.DEX = DEX
+        self.CON = CON
+        self.INT = INT
+        self.WIS = WIS
+        self.CHA = CHA
+    def __str__(self):
+        return "STR: {str}, DEX: {dex}, CON: {con}, INT: {int}, WIS: {wis}, CHA: {cha}".format(
+                str = self.STR, dex = self.DEX, con = self.CON, int = self.INT, wis = self.WIS, 
+                cha=self.CHA)
+        
+def select_abilities() -> Abilities:
+    while True:
+        command = input(ABILITY_INTRO).upper()
+        if command == "0":
+            return
+        else:
+            break
+    
+    while True:
+        command = input(ABILITY_ROLL).upper()
+        if command == "ROLL":
+            rolls = [0,0,0,0,0,0]
+            for i in range(6):
+                roll = []
+                for r in range(4):
+                    roll.append(choice([1,2,3,4,5,6]))
+                roll.sort(reverse = True)
+                for r in range(3):
+                    rolls[i] += roll[r]
+            return prioritize_abilities(rolls)
+        elif command == "STANDARD":
+            return prioritize_abilities([15,14,13,12,10,8])
+        elif command == "R":
+            return
+        else:
+            print("Invalid command entered. Try Again.\n")
+            
+def prioritize_abilities(rolls: [int]) -> Abilities:
+    rolls.sort(reverse = True)
+    while True:
+        command = input(ABILITY_PRIORITY.format(scores=rolls)).upper()
+        
+        abilities = Abilities(0,0,0,0,0,0)
+        command = command.split(' ')
+        for i in range(6):
+            if command[i] == "STR":
+                abilities.STR = rolls[i]
+            elif command[i] == "DEX":
+                abilities.DEX = rolls[i]
+            elif command[i] == "CON":
+                abilities.CON = rolls[i]
+            elif command[i] == "INT":
+                abilities.INT = rolls[i]
+            elif command[i] == "WIS":
+                abilities.WIS = rolls[i]
+            elif command[i] == "CHA":
+                abilities.CHA = rolls[i]
+            else:
+                print("Invalid command entered. Try Again.\n")
+                continue
+        return abilities
+           
+NAME_PROMPT = """
+--------------------------------------------------
+Selecting Name
+--------------------------------------------------
+Example Input: "Marissa Weathersong"
+Input your desired name: (Case Sensitive)
+"""
+
+def select_name() -> str:
+    return input(NAME_PROMPT)
+
+RACE_MENU = """
+--------------------------------------------------
+Selecting Race
+--------------------------------------------------
+Selected Race: {race}
+
+Select One:
+    DW: Dwarf
+    EL: Elf
+    HA: Halfling
+    HU: Human
+    DR: Dragonborn
+    GN: Gnome
+    HE: Half-Elf
+    HO: Half-Orc
+    TI: Tiefling
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Input Selection (Case Insensitive): 
+"""
+
+SUBRACE_MENU = """
+--------------------------------------------------
+Subrace Selection
+--------------------------------------------------
+Many races have subraces that have additional
+features and backgrounds. You may choose to have
+a subrace for your character, or not.
+
+You selected the race: {race}
+You may choose from the following subraces:
+{subraces}
+--------------------------------------------------
+Input Command (Case Insensitive): 
+"""
+
+class Race:
+    def __init__(self, scores = 0, lifespan=0, alignment=0, size=0, speed=0, vision=0,
+                 resistance=0, combat=0, proficiency=0, languages=0, subrace=0, special=0):
+        self.scores = scores
+        self.lifespan = lifespan
+        self.alignment = alignment
+        self.size = size
+        self.speed = speed
+        self.vision = vision
+        self.resistance = resistance
+        self.combat = combat
+        self.proficiency = proficiency
+        self.languages = languages
+        self.subrace = subrace
+        self.special = special
+    
+    def __str__(self):
+        pass
+    
+    def set_dwarf(self, subrace, tool):
+        self.scores = [0,0,2,0,0,0]
+        self.lifespan = (50,350)
+        self.alignment = ("Lawful","Good")
+        self.size = "MEDIUM"
+        self.speed = 25
+        self.vision = "DARKVISION"
+        self.resistance = "POISON"
+        self.combat = ["BATTLEAXE", "HANDAXE", "THROWINGHAMMER", "WARHAMMER"]
+        self.proficiency = tool
+        self.languages = ["COMMON", "DWARVEN"]
+        self.subrace = subrace.upper()
+        self.special = ["Unhindered by wearing heavy armor (No speed decrease)",
+                        "Stonecunning: Add double your proficiency bonus on \n\
+                        history check rolls relating to the origin of stoneworks"]
+        self.set_subrace()
+    
+    def set_elf(self,subrace, language=0):
+        self.scores = [0,2,0,0,0,0]
+        self.lifespan = (100,750)
+        self.alignment = ("Chaotic","Good")
+        self.size = "MEDIUM"
+        self.speed = 30
+        self.vision = "DARKVISION"
+        self.proficiency = "PERCEPTION"
+        self.resistance = "CHARM"
+        self.combat = []
+        self.languages = ["COMMON", "ELVISH"]
+        self.subrace = subrace.upper()
+        self.special = ["Magic cannot put you to sleep",
+                        "Trance: You do not need to sleep. Instead you meditate\n\
+                        for 4 hours a day. This counts as a 'long rest'."]
+        self.set_subrace(language)
+        
+    def set_subrace(self, language=0):
+        if self.subrace == "HILL":
+            self.scores[4] += 1
+            self.special.append("Dwarven Toughness: Increases your hitpoints by 1 \n\
+                                and increases by one every time you level up.")
+        elif self.subrace == "MOUN":
+            self.scores[0] += 2
+            self.combat.extend("LIGHTARMOR", "MEDIUMARMOR")
+        elif self.subrace == "HIGH":
+            self.score[3] += 1
+            self.combat.extend("LONGSWORD", "SHORTSWORD", "SHORTBOW", "LONGBOW")
+            self.special.extend("Cantrip: You know one cantrip of your choice from\n\
+                                the wizard's spell book. Your intelligence is your spellcasting\n\
+                                ability for it.")
+            self.languages.append(language)
+        elif self.subrace == "WOOD":
+            self.scores[4] += 1
+            self.combat.extend("LONGSWORD", "SHORTSWORD", "SHORTBOW", "LONGBOW")
+            self.speed = 35
+            self.special.append("Mask of the Wild: You can attempt to hide even when\n\
+                                you are only lightly obscured by foliage, heavy rain,\n\
+                                falling snow, mist, and other natural phenomena.")
+        elif self.subrace == "DROW":
+            self.scores[5] += 1;
+            self.vision = "SUPERIOR DARKVISION"
+            self.combat.extend("RAPIERS","SHORTSWORD","CROSSBOW")
+            self.special.extend("Sunlight Sensitivity: You have a disadvantage on attack\n\
+                                rolls and on Wisdom (Perception) checks that rely on sight\n\
+                                when you, the target of your attack, or whatever you're trying\n\
+                                to perceive is in direct sunlight.",
+                                "Drow Magic: You know the 'dancing lights' cantrip. Upon reaching\n\
+                                level three, you can cast 'faerie fire' once per day. Upon reaching\n\
+                                level five, you can cast 'darkness' once per day. Your charisma is\n\
+                                your spellcastinh ability for these spells.")
+            
+            
+TOOL_MENU = """
+--------------------------------------------------
+Tool Proficiency
+--------------------------------------------------
+Dwwarves recieve a proficiency in a set of artisan
+tools. Select from the following:
+    SMITH: Smith's Tools
+    BREWER: Brewer's Supplies
+    MASON: Mason's Tools
+--------------------------------------------------
+Input Command (Case Insensitive): 
+"""
+
+LANGUAGE_MENU = """
+--------------------------------------------------
+Language Selection
+--------------------------------------------------
+As a High Elf, you have knowledge of an additional
+language. Select from one of the following:
+    Dwarven
+    Giant
+    Gnomish
+    Goblin
+    Halfling
+    Orc
+    Abyssal
+    Celestial
+    Draconic
+    Infernal
+    Primordial
+    Sylvan
+    Undercommon
+--------------------------------------------------
+Input Command (Case Insensitive): 
+"""
+
+def select_race() -> Race:
+    race = Race()
+    while True:
+        command = input(RACE_MENU).upper()
+        
+        if command == "DW": #DWARF
+            while True:
+                subrace = input(SUBRACE_MENU.format(race="Dwarf", 
+                                subraces="\tHILL: Hill Dwarf\n\tMOUN: Mountain Dwarf")).upper()
+                if subrace == ("NONE","HILL","MOUN"):
+                    break
+                else:
+                    print ("Invalid subrace entered. Try Again.")
+            while True:
+                tool = input(TOOL_MENU).upper()
+                if tool in ("SMITH", "BREWER", "MASON"):
+                    break
+                else:
+                    print ("Invalid subrace entered. Try Again.")
+            race.set_dwarf(subrace, tool)
+            return race
+        elif command == "EL": #ELF
+            while True:
+                subrace = input(SUBRACE_MENU.format(race="Elf", 
+                                subraces="\tHIGH: High Elf\n\tWOOD: Wood Elf\n\tDROW: Dark Elf"))\
+                                .upper()
+                if subrace in ("HIGH" "WOOD","DROW"):
+                    break
+                else:
+                    print ("Invalid subrace entered. Try Again.")
+            while subrace == "HIGH":
+                language = input(LANGUAGE_MENU).upper()
+                if language in ("DWARVEN,GIANT,GNOMISH,GOBLIN,HALFLING,ORC,ABYSSAL,CELESTAIL,\
+                                DRACONIC,INFERNAL,PRIMORDIAL,SYLVAN,UNDERCOMMON"):
+                    break
+                else:
+                    print ("Invalid language entered. Try Again.")
+                    
+            race.set_elf(subrace)
+            return race
+        elif command == "HA":   #HALFLING
+            race.set_halfling()
+            return race
+        elif command == "HU": #HUMAN
+            while True:
+                subrace = input(SUBRACE_MENU.format(race="Human", 
+                                subraces="There are no human subraces, but there are ethnicities.\n\
+                                Choose from one of the following:\n\
+                                \tCAL: Calishite\n\
+                                \tCHO: Chondathan\n\
+                                \tDAM: Damaran\n\
+                                \tILL: Illuskan\n\
+                                \tMUL: Mulan\n\
+                                \tRAS: Rashemi\n\
+                                \tSHO: Shou\n\
+                                \tTET: Tethyrian\n\
+                                \tTUR: Turami")).upper()
+                if subrace in ("CAL","CHO","DAM","ILL","MUL","RAS","SHO","TET","TUR"):
+                    break
+                else:
+                    print ("Invalid ethnicity entered. Try Again.")
+            race.set_human(subrace)
+            return race
+        elif command == "DR": #DRAGONBORN
+            while True:
+                subrace = input(SUBRACE_MENU.format(race="Dragonborn", 
+                                subraces="There are no dragonborn subraces, but there are ancestries.\n\
+                                Choose from one of the following:\n\
+                                \tBLA: Black     Acid            5 by 30ft line (dex save)\n\
+                                \tBLU: Blue      Lightning       5 by 30ft line (dex save)\n\
+                                \tBRA: Brass     Fire            5 by 30ft line (dex save)\n\
+                                \tBRO: Bronze    Lightning       5 by 30ft line (dex save)\n\
+                                \tCOP: Copper    Acid            5 by 30ft line (dex save)\n\
+                                \tGOL: Gold      Fire            15ft cone (dex save)\n\
+                                \tGRE: Green     Poison          15ft cone (con save)\n\
+                                \tRED: Red       Fire            15ft cone (dex save)\n\
+                                \tSIL: Silver    Cold            15ft cone (con save)\n\
+                                \tWHI: White     Cold            15ft cone (con save)\n")).upper()
+                if subrace in ("BLU","BLA","BRA","BRO","COP","GOL","GRE","RED","SIL","WHI"):
+                    break
+                else:
+                    print ("Invalid ancestry entered. Try Again.")
+            race.set_dragonborn(subrace)
+            return race
+        elif command == "GN": #GNOME
+            while True:
+                subrace = input(SUBRACE_MENU.format(race="Gnome", 
+                                subraces="\tFORE: Forest Gnome\n\tROCK: Rock Gnome")).upper()
+                if subrace in ("FORE","ROCK"):
+                    break
+                else:
+                    print ("Invalid subrace entered. Try Again.")
+            race.set_gnome(subrace)
+            return race
+        elif command == "HE": #HALF-ELF
+            race.set_halfelf()
+            return race
+        elif command == "HO": #HALF-ORC
+            race.set_halforc()
+            return race
+        elif command == "TI": #TIEFLING
+            race.set_tiefling()
+            return race
+        elif command == "R":
+            return
+        else:
+            print (print("Invalid command entered. Try Again.\n"))
+
+def select_class():
+    pass
+
+def select_proficiency():
+    pass
+
+def select_looks():
+    pass
+
+def select_morality():
+    pass
+
+def select_background():
+    pass
+
+def select_equipment():
+    pass
+
+#CREATE_NEW GUI####################################################################################
+
+
+CLASS_MENU = """
+--------------------------------------------------
+Selecting Class
+--------------------------------------------------
+Selected Class: {class}
+
+Select One:
+    BB: Barbarian
+    BA: Bard
+    CL: Cleric
+    DR: Druid
+    FI: Fighter
+    MO: Monk
+    PA: Paladin
+    RA: Ranger
+    RO: Rogue
+    SO: Sorcerer
+    WA: Warlock
+    WI: Wizard
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Input Selection (Case Insensitive): 
+"""
+
+PROFICIENCY_MENU = """
+--------------------------------------------------
+Selecting Proficiencies
+--------------------------------------------------
+Selected Proficiencies:
+Saving Throws: {savingThrows}
+Skills:        {skills}
+    ST: Select saving throw proficiencies
+    SK: Select skill proficiencies
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Input Selection (Case Insensitive): 
+"""
+
+SAVINGTHROW_MENU = """
+--------------------------------------------------
+Selectign Saving Throw Proficicency
+--------------------------------------------------
+Selected Saving Throws: {savingThrows}
+
+Select Two:
+    STR: Strength
+    DEX: Dexterity
+    CON: Constitution
+    INT: Intellect
+    WIS: Wisdom
+    CHA: Charisma
+    
+    R: Return to Proficiency Menu
+--------------------------------------------------
+Example input: "DEX CON"
+Input Selection (Case Insensitive): 
+"""
+
+SKILLS_MENU = """
+--------------------------------------------------
+Selecting Skill Proficiency
+--------------------------------------------------
+Selected Skills: {skills}
+
+Select Two:
+    ACR: Acrobatics
+    ANI: Animal Handling
+    ARC: Arcana
+    ATH: Atheltics
+    DEC: Deception
+    HIS: History
+    INS: Insight
+    INT: Intimidation
+    INV: Investigate
+    MED: Medicine
+    NAT: Nature
+    PRC: Perception
+    PRF: Performance
+    PRS: Persuasion
+    REL: Religion
+    SOH: Sleight of Hand
+    STE: Stealth
+    SUR: Survival
+    
+    
+    R: Return to Proficiency Menu
+--------------------------------------------------
+Example input: "STE SOH" ; "REL MED" ; "ARC HIS"
+Input Selection (Case Insensitive): 
+"""
+
+APPEARANCE_MENU = """
+--------------------------------------------------
+Selecting Appearance: 
+--------------------------------------------------
+Current Appearance:
+Age:    {age}
+Gender: {gender}
+Height: {height}
+Weight: {weight}
+Skin:   {skin}
+Eyes:   {eyes}
+Hair:   {hair}
+
+Specify field with input:
+    GE: Gender
+    HE: Height
+    WE: Weight
+    AG: Age
+    SK: Skin Color/Complexion
+    EY: Eye Color
+    HA: Hair Color
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Example inputs: "WE 157lbs" ; "WE 79kg" ; "AG 27"
+Input Selection (Case Insensitive): 
+"""
+
+MORALITY_MENU = """
+--------------------------------------------------
+Selecting Alignment:
+--------------------------------------------------
+Current Alignment: {alignment}
+
+Lawfulness (Pick One):
+    C: Chaotic
+    N: Neutral
+    L: Lawful
+    
+Goodness (Pick One):
+    E: Evil
+    N: Neutral
+    G: Good
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Example inputs: "C N" ; "N G" ; "L G"
+Input Selection (Case Insensitive): 
+"""
+
+BACKGROUND_MENU = """
+--------------------------------------------------
+Selecting Background:
+--------------------------------------------------
+Current Background: {background}
+
+Select One:
+    AC: Acolyte
+    CH: Charlatan
+    EN: Entertainter
+    GA: Guild Artisan
+    HE: Hermit
+    NO: Noble
+    OU: Outlander
+    SA: Sage
+    SA: Sailor
+    SO: Soldier
+    UR: Urchin
+    
+    R: Return to Character Creation Menu
+--------------------------------------------------
+Example inputs: "AC" ; "CH" ; "SA"
+Input Selection (Case Insensitive): 
+"""
+
+BACKGROUND_DETAILS_MENU = """
+--------------------------------------------------
+Selecting Background:
+--------------------------------------------------
+Selected Background: {background}
+
+Background Details:
+    {details}
+Personality Trait:
+    {personality}
+Ideal:
+    {ideal}
+Bond:
+    {bond}
+Flaw:
+    {flaw}
+    
+Skill Proficiencies: {skills}
+Languages:           {languages}
+Equipment:           {equipment}
+Feature:             {feature}
+      
+    R: Return to Background Menu
+--------------------------------------------------
+Example inputs: "AC" ; "CH" ; "SA"
+Input Selection (Case Insensitive): 
+"""
+
+EQUIPMENT_INTRO = """
+--------------------------------------------------
+Selecting equipment requires that you have already
+selected a class and a backgroundas as the gold 
+you recieve and the items that you start with are 
+based on your class and background.
+--------------------------------------------------
+"""
+
+EQUIPMENT_MENU = """
+--------------------------------------------------
+Selecting Equipment:
+--------------------------------------------------
+Current Inventory:
+{inventory}
+--------------------------------------------------
+Available gold: {gold}
+
+Select a category to browse:
+    ARM: Select Armor
+    WEA: Select Weapons
+    ADV: Select Adventuring Gear
+    TOO: Select Tools
+    
+    R: Return to Background Menu
+--------------------------------------------------
+Input "SELL" followed by a space and the name of
+an item to remove it from your inventory and
+return the gold to your pool.
+--------------------------------------------------
+Example inputs: "ARM" ; "WEA" ; "SELL <Item Name>"
+Input Selection (Case Insensitive): 
+"""
+
+ARMOR_MENU = """
+--------------------------------------------------
+Selecting Armor:
+--------------------------------------------------
+Current Inventory:
+{inventory}
+--------------------------------------------------
+Available gold: {gold}
+
+Armor             Cost        Armor Class
+-----             ----        -----------
+Light Armor:
+    Padded        5gp         11 + dex mod
+    Leather       10gp        11 + dex mod
+    Studded       45gp        12 + dex mod
+Medium Armor:
+    Hide          10gp        12 + dex mod (max+2)
+    Chain         50gp        13 + dex mod (max+2)
+    Scalemail     50gp        14 + dex mod (max+2)
+    Breastplate   400gp       14 + dex mod (max+2)
+    Halfplate     750gp       15 + dex mod (max+2)
+Heavy Armor:
+    Ringmail      30gp        14
+    Chainmail     75gp        16
+    Splint        200gp       17
+    Plate         1500gp      18
+Shield
+    Shield        10gp        +2 to AC
+    
+    R: Return to Equipment Menu
+--------------------------------------------------
+Input "BUY" followed by a space and the name of
+the item to buy. Input "SELL" followed by a space
+and the name of an item in your inventory to
+refund the item.
+--------------------------------------------------
+Example inputs: "BUY Ringmail" ; "SELL Padded"
+Input Selection (Case Insensitive): 
+"""
+
+WEAPON_MENU = """
+---------------------------------------------------------------------
+Selecting Weapons:
+---------------------------------------------------------------------
+Current Inventory:
+{inventory}
+---------------------------------------------------------------------
+Available gold: {gold}
+
+Name              Cost    Damage  Properties
+----              ------  ------  ----------
+Simple Melee Weapons:
+    Club          1sp      1d4    Light
+    Dagger        2gp      1d4    Finesse, Light, Thrown (20/60)
+    Greatclub     2sp      1d8    Two-Handed
+    Handaxe       5gp      1d6    Light, Thrown (20/60)
+    Javelin       5sp      1d6    Thrown (30/120)
+    Light Hammer  2gp      1d4    Light, Thrown (20/60)
+    Mace          5gp      1d6    ---
+    Quarterstaff  2sp      1d6    Versatile(1d8)
+    Sickle        1gp      1d6    Light
+    Spear         1gp      1d6    Thrown (20/60), Verstile (1d8)
+Simple Ranged Weapons:
+    LightCrossbow 25gp     1d8    Ammunition (80/320, Loading, 2-hand
+    Dart          5cp      1d4    Finesse, Thrown (20,60)
+    Shortbow      25gp     1d6    Ammunition (80/320), 2-hand
+    Sling         1sp      1d4    Ammunition (30/120)
+Martial Melee Weapons:
+    Battleaxe     10gp     1d8    Versatile (1d10)
+    Flail         10gp     1d8    ---
+    Glaive        20gp     1d8    Heavy, Reach, 2-Hand
+    Greataxe      30gp     1d12   Heavy, 2-hand
+    Greatsword    50gp     2d6    Heavy, 2-hand
+    Halberd       20gp     1d10   Heavy, Reach, 2-Hand
+    Lance         10gp     1d12   Reach, Special
+    Longsword     15gp     1d8    Versatile (1d10)
+    Maul          10gp     1d8    Heavy, 2-Hand
+    Morningstar   15gp     1d8    ---
+    Pike          5gp      1d10   Heavy, Reach, 2-Hand
+    Rapier        25gp     1d8    Finesse
+    Scimitar      25gp     1d6    Finesse, Light
+    Shortsword    10gp     1d6    Finesse, Light
+    Trident       5gp      1d6    Thrown (20/60), Versatile (1d8)
+    War Pick      5gp      1d8    ---
+    Warhammer     15gp     1d8    Versatile (1d10)
+    Whip          2gp      1d4    Finesse, Reach
+Martial Ranged Weapons:
+    Blowgun       10gp     1      Ammunition (25/100), Loading
+    HandCrossbow  75gp     1d6    Ammunition (30/120), Light, Loading
+    HeavyCrossbow 50gp     1d10   Ammunition (100/400), Heavy, Loading, 2-Hand
+    Longbow       50gp     1d8    Ammunition (150/600), Heavy, 2-hand
+    Net           1gp      ---    Special, Thrown(5/15)
+    
+    R: Return to Equipment Menu
+---------------------------------------------------------------------
+Input "BUY" followed by a space and the name of
+the item to buy. Input "SELL" followed by a space
+and the name of an item in your inventory to
+refund the item.
+---------------------------------------------------------------------
+Example inputs: "BUY Sling" ; "SELL HandCrossbow"
+Input Selection (Case Insensitive): 
+"""
+
+GEAR_MENU = """
+--------------------------------------------------
+Selecting Adventuring Gear:
+--------------------------------------------------
+Current Inventory:
+{inventory}
+--------------------------------------------------
+Available gold: {gold}
+
+Item               Info         Cost
+----               ----         ----
+Abacus                          2gp
+Acid               (Vial)       25gp
+AlchemistFire      (Flask)      50gp
+Arrows             (x20)        1gp
+BlowgunNeedle      (x50)        1gp
+CrossbowBolt       (x20)        1gp
+SlingBullets       (x20)        4cp
+Antitoxin                       50gp
+Crystal                         10gp
+Orb                             20gp
+Rod                             10gp
+Staff                           5gp
+Wand                            10gp
+Backpack                        2gp
+BallBearings       (x1000)      1gp
+Barrel                          2gp
+Basket                          4sp
+Bedroll                         1gp
+Bell                            1gp
+Blanket                         5sp
+BlockAndTackle                  1gp
+Book                            25gp
+GlassBottle                     2gp
+Bucket                          5cp
+Caltrops           (x20)        1gp
+Candle                          1cp
+BoltCase                        1gp
+ScrollCase                      1gp
+Chain              (10ft)       5gp
+Chalk              (x1)         1cp
+Chest                           5gp
+ClimberKit                      25gp
+CommonClothes                   5sp
+CostumeClothes                  5gp
+FineClothes                     15gp
+TravelerClothes                 2gp
+ComponentPouch                  25gp
+Crowbar                         2gp
+MistletoeSprig                  1gp
+Totem                           1gp
+WoodenStaff                     5gp
+YewWand                         10gp
+FishingTackle                   1gp
+Flask                           2cp
+GrappleHook                     2gp
+Hammer                          1gp
+Sledgehammer                    2gp
+HealerKit                       5gp
+HolyAmulet                      5gp
+HolyEmblem                      5gp
+HolyReliquary                   5gp
+HolyWater          (Flask)      25gp
+Hourglass                       25gp
+HuntingTrap                     5gp
+Ink                (1oz)        10gp
+Pen                             2cp
+Jug                             2cp
+Ladder             (10ft)       1sp
+Lamp                            5sp
+BullseyeLantern                 10gp
+HoodedLantern                   5gp
+Lock                            10gp
+MagnifyingGlass                 100gp
+Manacles                        2gp
+MessKit                         2sp
+MirrorSteel                     5gp
+Oil                (Flask)      1sp
+Paper              (One Sheet)  2sp
+Parchment          (One Sheet)  1sp
+Perfume            (Vial)       5gp
+MiningPick                      2gp
+Piton                           5cp
+BasicPoison        (Vial)       100gp
+Pole               (10ft)       5cp
+IronPot                         2gp
+HealingPotion                   50gp
+Pouch                           5sp
+Quiver                          1gp
+PortableRam                     4gp
+Rations            (1 day)      5sp
+Robes                           1gp
+HempRope           (50ft)       1gp
+SilkRope           (50ft)       10gp
+Sack                            1cp
+MerchantScale                   5gp
+SealingWax                      5sp
+Shovel                          2gp
+SignalWhistle                   5cp
+SignetRing                      5gp
+Soap                            2cp
+Spellbook                       50gp
+IronSpikes         (x10)        1gp
+Spyglass                        1000gp
+TwoPersonTent                   2gp
+Tinderbox                       5sp
+Torch                           1cp
+Vial                            1gp
+Waterskin                       2sp
+Whetstone                       1cp
+    
+    R: Return to Equipment Menu
+--------------------------------------------------
+Input "BUY" followed by a space and the name of
+the item to buy. Input "SELL" followed by a space
+and the name of an item in your inventory to
+refund the item.
+--------------------------------------------------
+Example inputs: "BUY Torch" ; "SELL Ladder"
+Input Selection (Case Insensitive): 
+"""
+
+TOOL_MENU = """
+--------------------------------------------------
+Selecting Adventuring Gear:
+--------------------------------------------------
+Current Inventory:
+{inventory}
+--------------------------------------------------
+Available gold: {gold}
+
+Item                            Cost
+----                            ----
+Artisan's Tools:
+    AlchemySupplies             50gp
+    BrewingSupplies             20gp
+    CalligraphySupplies         10gp
+    CarpentryTools              8gp
+    CartographyTools            15gp
+    CobblingTools               5gp
+    CookingUtensils             1gp
+    GlassblowingTools           30gp
+    JewelingTools               25gp
+    LeatherworkingTools         5gp
+    MasonryTools                10gp
+    PaintingTools               10gp
+    PotteryTools                10gp
+    SmithTools                  20gp
+    TinkerTools                 50gp
+    WeaverTools                 1gp
+    WoodcarvingTools            1gp
+Gaming Sets:
+    DiceSet                     1sp
+    DragonchessSet              1gp
+    PlayingCards                5sp
+    ThreeDragonAnteSet          1gp
+Musical Instruments:
+    Bagpipes                    30gp
+    Drum                        6gp
+    Dulcimer                    25gp
+    Flute                       2gp
+    Lute                        35gp
+    Lyre                        30gp
+    Horn                        3gp
+    PanFlute                    12gp
+    Shawm                       2gp
+    Viol                        30gp
+    
+DisguiseKit                     25gp
+ForgeryKit                      15gp
+HerbalismKit                    5gp
+NavigatingTools                 25gp
+PoisonerKit                     50gp
+TheivesTools                    25gp
+    
+    
+    R: Return to Equipment Menu
+--------------------------------------------------
+Input "BUY" followed by a space and the name of
+the item to buy. Input "SELL" followed by a space
+and the name of an item in your inventory to
+refund the item.
+--------------------------------------------------
+Example inputs: "BUY PoisonerKit" ; "SELL Viol"
+Input Selection (Case Insensitive): 
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    handler()

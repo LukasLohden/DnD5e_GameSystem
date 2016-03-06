@@ -70,21 +70,21 @@ HEADER:
     
     QUERIES:
     
-    get_Appearance() -> Appearance: namedtuple
+    get_Appearance() -> Appearance: class
     
-    get_Details() -> Class: namedtuple
+    get_Details() -> Class: class
     
-    get_Persona() -> Persona: namedtuple
+    get_Persona() -> Persona: class
     
-    get_Abilities() -> Abilities: namedtuple
+    get_Abilities() -> Abilities: class
     
-    get_Spells() -> [Spell]: [namedtuple]
+    get_Spells() -> [Spell]: [class]
     
-    get_Skills() -> Skills: namedtuple
+    get_Skills() -> Skills: class
     
-    get_Inventory() -> [Item]: [namedtuple]
+    get_Inventory() -> [Item]: [class]
     
-    get_Equipped() -> Equipped: namedtuple
+    get_Equipped() -> Equipped: class
     
 """
 ###################################################################################################
@@ -94,51 +94,29 @@ HEADER:
 from collections import namedtuple
 
 ###################################################################################################
-# DATA                                                                                            #
-###################################################################################################
-
-Details =      namedtuple('Details',      'player_class inspiration armor_class initiative speed \
-                                           health hit_dice SavingThrows attacks proficiencies')
-
-SavingThrows = namedtuple('SavingThrows', 'strength dexterity constitution intelligence wisdom \
-                                           charisma')
-
-Persona =      namedtuple('Persona',      'name Appearance features background trait ideal bond\
-                                           flaw languages companion alignment nature deity' )
-
-Appearance =   namedtuple('Appearance',   'race height age gender complexion build fitness,\
-                                           weight hair_color hair_length hair_type facial_hair\
-                                           body_hair')
-
-Abilities =    namedtuple('Abilities',    'strength dexterity constitution intelligence wisdom\
-                                           charisma')
-
-Skill =        namedtuple('Skills',       'acrobatics animal_handling arcana athletics deception\
-                                           history insight intimidation investigation medicine\
-                                           nature perception performance persuasion religion\
-                                           sleight_of_hand stealth survival')
-
-Spell =        namedtuple('Spell',        'name level school casting_time ritual concentration')
-
-Item =         namedtuple('Item',         'type cost rarity damage weight properties armor_class\
-                                           strength stealth speed carrying_capacity size equipped')
-
-###################################################################################################
 # CLASS                                                                                           #
 ###################################################################################################
 
 class Character:
     
-    def __init__(self, Details, SavingThrows, Persona, Appearance, Abilities, Skills, spells, \
-                 inventory):
+    def __init__(self, abilities=0,name=0,race=0,clas=0,proficiency=0,looks=0,morality=0,
+                 background=0,equipment=0,spells=0):
         
-        self.Details = Details
-        self.SavingThrows = SavingThrows
-        self.Persona = Persona
-        self.Appearance = Appearance
-        self.Abilities = Abilities
-        self.Skill = Skill
+        self.abilities = abilities
+        self.name = name
+        self.race = race
+        self.clas = clas
+        self.proficiency = proficiency
+        self.looks = looks
+        self.morality = morality
+        self.background = background
+        self.equipment = equipment
         self.spells = spells
+    def __str__(self):
+        to_return = "Name: " + str(self.name) + "\n"
+        to_return += "Abilities: " + str(self.abilities) + "\n"
+        to_return += "Race: " + str(self.race)
+        return to_return
         
 #ACTIONS###########################################################################################
     """
@@ -161,6 +139,7 @@ class Character:
     use_spell(spell: Spell) -> null
     """
     
+    """
     def gain_XP(self, xp: int) -> int:
         pass
    
@@ -169,7 +148,7 @@ class Character:
 
     def heal_damage(self, dmg: int) -> int:
         pass
-
+    
     def pickup_item(self, item: Item) -> Item:
         pass
     
@@ -184,7 +163,7 @@ class Character:
     
     def use_spell(self, spell: Spell) -> Spell:
         pass
-    
+    """    
 #QUERIES###########################################################################################
     
     """
@@ -213,7 +192,7 @@ class Character:
     
     
 #HELPER############################################################################################
-
+    """
     def _check_details(self, details: Details) -> Details:
         pass
     
@@ -234,7 +213,7 @@ class Character:
     
     def _check_spells(self, details: [Spell]) -> [Spell]:
         pass
-
+    """
 
 
 
